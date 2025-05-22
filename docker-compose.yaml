@@ -1,0 +1,28 @@
+name: tasks_md
+services:
+    app:
+        image: baldissaramatheus/tasks.md
+        container_name: tasks_md-app        
+        restart: always
+        pull_policy: always
+        environment:
+            - PGID=1000
+            - PUID=1000
+            - BASE_PATH=
+            - TITLE=
+            - LOCAL_IMAGES_CLEANUP_INTERVAL=1440
+        ports:
+            - '172.17.0.1:60134:8080'
+        volumes:
+            - '/path/to/config/:/config/'
+            - '/path/to/tasks/:/tasks/'
+        networks:
+            - tasks_md
+
+networks:
+  tasks_md:
+    name: tasks_md
+    external: false
+    
+        
+
