@@ -1,0 +1,34 @@
+# nginx proxy address - http://172.17.0.1:60134
+
+name: tasks_md
+x-logging: &default-logging
+  options:
+    max-size: '5m'
+    max-file: '1'
+  driver: json-file
+
+services:
+  app:
+    image: baldissaramatheus/tasks.md:latest
+    container_name: tasks-app
+    restart: always
+    pull_policy: always
+    logging: *default-logging
+    environment:
+      PGID: 1000
+      PUID: 1000
+      BASE_PATH: 
+      - 'TITLE=${APP_ORG_NAME:-My} Tasks'
+      - 'LOCAL_IMAGES_CLEANUP_INTERVAL=1440'
+    ports:
+      - '172.17.0.1:60134:8080'
+    volumes:
+      - './rootfs/data/tasks:/tasks'
+      - './rootfs/config/tasks:/config'
+    networks:
+      - tasks_md
+
+networks:
+  tasks_md:
+    name: tasks_md
+    external: false
