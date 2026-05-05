@@ -23,8 +23,8 @@ services:
     ports:
       - '172.17.0.1:60134:8080'
     volumes:
-      - './rootfs/data/tasks:/tasks'
-      - './rootfs/config/tasks:/config'
+      - './volumes/data/tasks:/tasks'
+      - './volumes/config/tasks:/config'
     networks:
       - tasks_md
 
