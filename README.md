@@ -45,8 +45,8 @@ See `docker-compose.yaml` for complete list of configurable options.
 
 ## 📂 Volumes
 
-- `./rootfs/data/tasks` - Data storage
-- `./rootfs/config/tasks` - Data storage
+- `./volumes/data/tasks` - Data storage
+- `./volumes/config/tasks` - Data storage
 
 ## 🔍 Logging
 
