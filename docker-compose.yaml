@@ -21,15 +21,39 @@ services:
       PUID: ${SERVICE_USER:-1000}
       TITLE: ${APP_NAME:-My Tasks}
       LOCAL_IMAGES_CLEANUP_INTERVAL: ${LOCAL_IMAGES_CLEANUP_INTERVAL:-1440}
+      CONTAINER_NAME: tasks-app
+      HOSTNAME: ${BASE_HOST_NAME:-$HOSTNAME}
     ports:
       - '172.17.0.1:60134:8080'
     volumes:
       - './volumes/data/tasks:/tasks'
       - './volumes/config/tasks:/config'
+    labels:
+      - 'traefik.enable=true'
+      - 'cloudflare.enable=true'
+      - 'traefik.docker.network=proxy'
+      - 'cloudflare.service=http://tasks-app:8080'
+      - 'cloudflare.hostname=tasks-md.${CLOUDFLARE_ZONE_NAME:-}'
+      - 'traefik.http.routers.tasks-app.entrypoints=http'
+      - 'traefik.http.routers.tasks-app-secure.tls=true'
+      - 'traefik.http.routers.tasks-app.rule=Host($(${BASE_HOST_NAME:-$HOSTNAME}))'
+      - 'traefik.http.middlewares.tasks-app-https-redirect.redirectscheme.scheme=https'
+      - 'traefik.http.routers.tasks-app.middlewares=tasks-app-https-redirect'
+      - 'traefik.http.routers.tasks-app-secure.entrypoints=https'
+      - 'traefik.http.routers.tasks-app-secure.rule=Host($(${BASE_HOST_NAME:-$HOSTNAME}))'
+      - 'traefik.http.routers.tasks-app-secure.tls.certresolver=cloudflare'
+      - 'traefik.http.routers.tasks-app-secure.service=tasks-app'
+      - 'traefik.http.services.tasks-app.loadbalancer.server.port=8080'
     networks:
       - tasks_md
+      - proxy
+      - cloudflare
 
 networks:
   tasks_md:
     name: tasks_md
     external: false
+  proxy:
+    external: true
+  cloudflare:
+    external: true
