@@ -11,15 +11,16 @@ services:
   app:
     image: baldissaramatheus/tasks.md:latest
     container_name: tasks-app
+    hostname: ${BASE_HOST_NAME:-$HOSTNAME}
     restart: always
     pull_policy: always
     logging: *default-logging
     environment:
-      PGID: 1000
-      PUID: 1000
-      BASE_PATH: 
-      - 'TITLE=${APP_ORG_NAME:-My} Tasks'
-      - 'LOCAL_IMAGES_CLEANUP_INTERVAL=1440'
+      TZ: ${TZ:-America/New_York}
+      PGID: ${SERVICE_GROUP:-1000}
+      PUID: ${SERVICE_USER:-1000}
+      TITLE: ${APP_NAME:-My Tasks}
+      LOCAL_IMAGES_CLEANUP_INTERVAL: ${LOCAL_IMAGES_CLEANUP_INTERVAL:-1440}
     ports:
       - '172.17.0.1:60134:8080'
     volumes:
