@@ -19,7 +19,7 @@ services:
       TZ: ${TZ:-America/New_York}
       PGID: ${SERVICE_GROUP:-1000}
       PUID: ${SERVICE_USER:-1000}
-      TITLE: ${APP_NAME:-My Tasks}
+      TITLE: ${APP_ORG_NAME:-My Tasks}
       LOCAL_IMAGES_CLEANUP_INTERVAL: ${LOCAL_IMAGES_CLEANUP_INTERVAL:-1440}
       CONTAINER_NAME: tasks-app
       HOSTNAME: ${BASE_HOST_NAME:-$HOSTNAME}
