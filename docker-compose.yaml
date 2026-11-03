@@ -23,6 +23,12 @@ services:
       LOCAL_IMAGES_CLEANUP_INTERVAL: ${LOCAL_IMAGES_CLEANUP_INTERVAL:-1440}
       CONTAINER_NAME: tasks-md-app
       HOSTNAME: ${BASE_HOST_NAME:-$HOSTNAME}
+    healthcheck:
+      test: ['CMD', 'nc', '-z', '127.0.0.1', '8080']
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 30s
     ports:
       - '172.17.0.1:64363:8080'
     volumes:
